@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment Management System</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="/adminLogin" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <label for="usertype">Usertype:</label>
+        <select id="usertype" name="usertype" required>
+            <option value="hr">HR</option>
+            <option value="user">User</option>
+        </select><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const usertype = document.getElementById('usertype').value;
+            fetch('/adminLogin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Login successful') {
+                    window.location.href = '/admin';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error(error));
+        });
+    </script>
+
+    <h1>User Registration</h1>
+    <form action="/userRegistration" method="POST">
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required><br>
+        <label for="applicantId">Applicant ID:</label>
+        <input type="text" id="applicantId" name="applicantId" required><br>
+        <label for="candidateName">Candidate Name:</label>
+        <input type="text" id="candidateName" name="candidateName" required><br>
+        <label for="jobPosition">Job Position:</label>
+        <input type="text" id="jobPosition" name="jobPosition" required><br>
+        <label for="applicationDate">Application Date:</label>
+        <input type="date" id="applicationDate" name="applicationDate" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Register">
+    </form>
+
+    <script>
+        document.querySelector('userRegistration').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const object = {};
+            formData.forEach((value, key) => {
+                object[key] = value;
+            });
+            fetch('/userRegistration', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(object)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Success') {
+                    alert('Registration successful');
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error(error));
+        });
+    </script>
+
+</body>
+</html>
